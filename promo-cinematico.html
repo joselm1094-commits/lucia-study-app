@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Inteligente — Experiencia de Usuario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-frame {
+            width: 360px;
+            height: 800px;
+            background: #fff;
+            border-radius: 40px;
+            border: 12px solid #000;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.4);
+            position: relative;
+        }
+
+        .phone-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            position: relative;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .screen.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        /* SCREEN 1: Dashboard */
+        .screen-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .welcome {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            animation: slideUp 0.6s ease-out 0.2s both;
+        }
+
+        .stats-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            animation: slideUp 0.6s ease-out 0.4s both;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* SCREEN 2: Flashcards Click */
+        .screen-2 {
+            background: linear-gradient(180deg, #f8f9ff 0%, #f0f4ff 100%);
+            justify-content: space-around;
+        }
+
+        .card {
+            width: 280px;
+            height: 300px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: popScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card-text {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* SCREEN 3: Quiz Click */
+        .screen-3 {
+            background: linear-gradient(180deg, #fff5f0 0%, #fff 100%);
+            justify-content: space-around;
+        }
+
+        .quiz-box {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .quiz-q {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 14px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .option:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .option:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .option.correct {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            animation: pulse 0.6s ease-out;
+        }
+
+        /* SCREEN 4: Progreso */
+        .screen-4 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            justify-content: space-around;
+        }
+
+        .progress-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .badge {
+            font-size: 3rem;
+            animation: popInBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .badge:nth-child(2) { animation-delay: 0.1s; }
+        .badge:nth-child(3) { animation-delay: 0.2s; }
+        .badge:nth-child(4) { animation-delay: 0.3s; }
+        .badge:nth-child(5) { animation-delay: 0.4s; }
+        .badge:nth-child(6) { animation-delay: 0.5s; }
+
+        .streak {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+
+        /* SCREEN 5: CTA */
+        .screen-5 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            justify-content: space-around;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            animation: slideUpScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cta-text {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 25px;
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+
+        .cta-btn {
+            background: white;
+            color: #667eea;
+            padding: 14px 40px;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            animation: slideUpScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Overlay Text */
+        .overlay-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            pointer-events: none;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            padding: 20px;
+        }
+
+        .overlay-text.active {
+            opacity: 1;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUpScale {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes popScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            60% {
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes popInBounce {
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            60% {
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+            }
+        }
+
+        /* Notch */
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="phone-frame">
+            <div class="notch"></div>
+            <div class="phone-content">
+                <!-- SCREEN 1: Dashboard -->
+                <div class="screen screen-1 active">
+                    <div>
+                        <div class="welcome">Lucía</div>
+                        <div class="subtitle">Tu app de estudio</div>
+                    </div>
+                    <div style="width: 100%;">
+                        <div class="stats-box">
+                            <div class="stat-label">Racha 🔥</div>
+                            <div class="stat-value">7</div>
+                        </div>
+                        <div class="stats-box">
+                            <div class="stat-label">Promedio</div>
+                            <div class="stat-value">78%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 2: Flashcards -->
+                <div class="screen screen-2">
+                    <div class="card">
+                        <div class="card-text">Constitución</div>
+                        <div class="card-desc">📍 Spaced Repetition</div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 3: Quiz -->
+                <div class="screen screen-3">
+                    <div class="quiz-box">
+                        <div class="quiz-q">¿Cuántos artículos tiene la CE de 1978?</div>
+                        <div class="options">
+                            <div class="option">150</div>
+                            <div class="option correct">169 ✓</div>
+                            <div class="option">185</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 4: Progreso -->
+                <div class="screen screen-4">
+                    <div class="progress-title">Logros 🏆</div>
+                    <div class="achievements">
+                        <div class="badge">🎯</div>
+                        <div class="badge">🔥</div>
+                        <div class="badge">🧠</div>
+                        <div class="badge">💯</div>
+                        <div class="badge">📚</div>
+                        <div class="badge">⭐</div>
+                    </div>
+                    <div class="streak">Siguiendo fuerte 💪</div>
+                </div>
+
+                <!-- SCREEN 5: CTA -->
+                <div class="screen screen-5">
+                    <div>
+                        <div class="cta-title">¡Ya está aquí!</div>
+                        <div class="cta-text">Todo lo que necesitas para dominar oposiciones</div>
+                    </div>
+                    <button class="cta-btn">Empezar Ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const screens = document.querySelectorAll('.screen');
+        const durations = [2500, 2500, 3000, 3000, 3000]; // ms per screen
+
+        let currentScreen = 0;
+
+        function showScreen(index) {
+            screens.forEach(s => s.classList.remove('active'));
+            if (index < screens.length) {
+                screens[index].classList.add('active');
+            }
+        }
+
+        function autoPlay() {
+            showScreen(currentScreen);
+
+            setTimeout(() => {
+                currentScreen++;
+                if (currentScreen < screens.length) {
+                    autoPlay();
+                } else {
+                    currentScreen = 0;
+                    setTimeout(autoPlay, 1000);
+                }
+            }, durations[currentScreen]);
+        }
+
+        // Start on load
+        window.addEventListener('load', () => {
+            setTimeout(autoPlay, 200);
+        });
+
+        // Keyboard control
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                currentScreen = Math.min(currentScreen + 1, screens.length - 1);
+                showScreen(currentScreen);
+            }
+            if (e.key === 'ArrowLeft') {
+                currentScreen = Math.max(currentScreen - 1, 0);
+                showScreen(currentScreen);
+            }
+        });
+    </script>
+</body>
+</html>

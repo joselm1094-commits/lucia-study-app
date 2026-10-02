@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Inteligente — Anuncio PlayStore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 360px;
+            height: 800px;
+            background: white;
+            border-radius: 50px;
+            border: 16px solid #000;
+            box-shadow: 0 50px 150px rgba(102, 126, 234, 0.6), 0 0 100px rgba(102, 126, 234, 0.3);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            z-index: 100;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* ===== SCREEN 1: DASHBOARD ===== */
+        .screen-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding-top: 60px;
+            padding: 60px 20px 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .greeting {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+            animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .subtext {
+            font-size: 0.9rem;
+            opacity: 0.95;
+            animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            padding: 15px;
+            border-radius: 16px;
+            text-align: center;
+            animation: popUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .games-section {
+            padding: 20px;
+        }
+
+        .games-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .game-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .game-btn {
+            padding: 20px;
+            border-radius: 16px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: popUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .game-btn:nth-child(2) { animation-delay: 0.1s; }
+        .game-btn:nth-child(3) { animation-delay: 0.2s; }
+        .game-btn:nth-child(4) { animation-delay: 0.3s; }
+
+        .game-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .game-btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-flashcards { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-quiz { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .btn-word { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .btn-theme { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+
+        .game-icon {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .game-name {
+            font-size: 0.85rem;
+            display: block;
+        }
+
+        /* ===== SCREEN 2: FLASHCARDS ===== */
+        .screen-2 {
+            background: linear-gradient(180deg, #f8f9ff 0%, #f0f4ff 100%);
+            padding: 60px 20px 20px;
+            justify-content: center;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .game-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            animation: fillBar 1s ease-out;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            width: 100%;
+            height: 280px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: cardFlip 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .card-front {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .card-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-no {
+            color: #666;
+            background: white;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .btn-yes:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== SCREEN 3: QUIZ ===== */
+        .screen-3 {
+            background: linear-gradient(180deg, #fff5f0 0%, #fff 100%);
+            padding: 60px 20px 20px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 14px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .option:nth-child(2) { animation-delay: 0.1s; }
+        .option:nth-child(3) { animation-delay: 0.2s; }
+        .option:nth-child(4) { animation-delay: 0.3s; }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        /* ===== SCREEN 4: PROGRESO ===== */
+        .screen-4 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px 20px;
+            align-items: center;
+        }
+
+        .progress-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .achievement {
+            font-size: 2.5rem;
+            animation: popInBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+
+        .achievement:nth-child(2) { animation-delay: 0.1s; }
+        .achievement:nth-child(3) { animation-delay: 0.2s; }
+        .achievement:nth-child(4) { animation-delay: 0.3s; }
+        .achievement:nth-child(5) { animation-delay: 0.4s; }
+        .achievement:nth-child(6) { animation-delay: 0.5s; }
+
+        .streak-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 25px;
+            animation: slideUp 0.6s ease-out 0.6s both;
+        }
+
+        /* ===== SCREEN 5: NOTIFICACIÓN ===== */
+        .screen-5 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .notification {
+            animation: popScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .notif-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .notif-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .notif-text {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .cta-btn {
+            background: white;
+            color: #667eea;
+            padding: 14px 40px;
+            border-radius: 24px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            animation: slideUp 0.6s ease-out 0.3s both;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popUp {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            60% {
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes popInBounce {
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            60% {
+                transform: scale(1.15);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes popScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes cardFlip {
+            0% {
+                opacity: 0;
+                transform: rotateX(-30deg);
+            }
+            100% {
+                opacity: 1;
+                transform: rotateX(0);
+            }
+        }
+
+        @keyframes fillBar {
+            from {
+                width: 0%;
+            }
+            to {
+                width: 40%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen">
+        <div class="notch"></div>
+        <div class="content">
+            <!-- SCREEN 1: DASHBOARD -->
+            <div class="screen-1" id="screen-1">
+                <div class="header">
+                    <div class="greeting">Lucía</div>
+                    <div class="subtext">Tu progreso es increíble 🚀</div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Racha 🔥</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">78%</div>
+                        <div class="stat-label">Promedio</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Aprendidos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4h</div>
+                        <div class="stat-label">Estudiado</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 2: FLASHCARDS -->
+            <div class="screen-2" id="screen-2">
+                <div class="game-header">
+                    <div class="game-title">🎴 Flashcards Inteligentes</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">Constitución</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 15px;">Ley fundamental del Estado</div>
+                        <div class="card-buttons">
+                            <button class="card-btn btn-no">❌ No lo sé</button>
+                            <button class="card-btn btn-yes">✓ Lo sé</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 3: QUIZ -->
+            <div class="screen-3" id="screen-3">
+                <div class="game-header">
+                    <div class="game-title">❓ Quiz: ¿Cuántos artículos?</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%;"></div>
+                    </div>
+                </div>
+
+                <div class="question">¿Cuántos artículos tiene la Constitución Española de 1978?</div>
+
+                <div class="options">
+                    <div class="option">150</div>
+                    <div class="option selected">169 ✓</div>
+                    <div class="option">185</div>
+                    <div class="option">200</div>
+                </div>
+            </div>
+
+            <!-- SCREEN 4: PROGRESO -->
+            <div class="screen-4" id="screen-4">
+                <div class="progress-title">🏆 Logros</div>
+                <div class="achievements-grid">
+                    <div class="achievement">🎯</div>
+                    <div class="achievement">🔥</div>
+                    <div class="achievement">🧠</div>
+                    <div class="achievement">💯</div>
+                    <div class="achievement">📚</div>
+                    <div class="achievement">⭐</div>
+                </div>
+                <div class="streak-text">¡Mantén tu racha! 6 días más para el logro Semana Perfecta</div>
+            </div>
+
+            <!-- SCREEN 5: NOTIFICACIÓN -->
+            <div class="screen-5" id="screen-5">
+                <div class="notification">
+                    <div class="notif-icon">🔥</div>
+                    <div class="notif-title">¡Tu racha está en peligro!</div>
+                    <div class="notif-text">Completa hoy una sesión de 15 minutos para mantenerla</div>
+                    <button class="cta-btn">Continuar ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const screens = [
+            { el: document.getElementById('screen-1'), duration: 3500 },
+            { el: document.getElementById('screen-2'), duration: 3500 },
+            { el: document.getElementById('screen-3'), duration: 3500 },
+            { el: document.getElementById('screen-4'), duration: 3500 },
+            { el: document.getElementById('screen-5'), duration: 4000 }
+        ];
+
+        let currentIndex = 0;
+        let autoPlayInterval;
+
+        function showScreen(index) {
+            screens.forEach((s, i) => {
+                s.el.style.display = i === index ? 'flex' : 'none';
+            });
+        }
+
+        function autoPlay() {
+            showScreen(currentIndex);
+            currentIndex++;
+            if (currentIndex >= screens.length) {
+                currentIndex = 0;
+            }
+        }
+
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(() => {
+                autoPlay();
+            }, screens[currentIndex === 0 ? screens.length - 1 : currentIndex - 1].duration);
+        }
+
+        // Initialize
+        showScreen(0);
+        autoPlayInterval = setTimeout(() => {
+            currentIndex = 1;
+            autoPlay();
+            startAutoPlay();
+        }, screens[0].duration);
+
+        // Click to advance
+        document.addEventListener('click', () => {
+            clearInterval(autoPlayInterval);
+            clearTimeout(autoPlayInterval);
+            currentIndex++;
+            if (currentIndex >= screens.length) currentIndex = 0;
+            autoPlay();
+            startAutoPlay();
+        });
+    </script>
+</body>
+</html>

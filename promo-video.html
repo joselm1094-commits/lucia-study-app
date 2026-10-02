@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Inteligente - Vídeo Promocional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .video-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            aspect-ratio: auto;
+            background: white;
+            overflow: hidden;
+            box-shadow: none;
+            position: relative;
+            display: flex;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* Screen 1: Bienvenida */
+        .screen-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen-1::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .screen-1::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .screen-1 > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .screen-1 h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            animation: slideUpScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+            letter-spacing: -0.02em;
+        }
+
+        .screen-1 .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            animation: slideUp 0.8s ease-out 0.3s both;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .screen-1 .desc {
+            font-size: 1rem;
+            opacity: 0.8;
+            animation: slideUp 0.8s ease-out 0.5s both;
+            margin-top: 20px;
+            font-weight: 400;
+        }
+
+        .screen-1 .emoji {
+            font-size: 5rem;
+            margin: 30px 0;
+            animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+
+        /* Screen 2: Flashcards */
+        .screen-2 {
+            background: linear-gradient(180deg, #f8f9ff 0%, #f0f4ff 100%);
+            padding: 40px 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .screen-2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+        }
+
+        .screen-2 h2 {
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            animation: slideUp 0.6s ease-out both;
+        }
+
+        .card-flip {
+            width: 85%;
+            height: 280px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px auto;
+            animation: cardFlip 1.4s ease-in-out 0.3s both;
+            flex-direction: column;
+            perspective: 1000px;
+            position: relative;
+            border: 2px solid rgba(102, 126, 234, 0.05);
+            transition: box-shadow 0.4s ease;
+        }
+
+        .card-flip:hover {
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
+        }
+
+        .card-flip.back {
+            animation: cardFlipBack 1.4s ease-in-out;
+        }
+
+        .card-front {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-back {
+            font-size: 1.1rem;
+            color: #555;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.7s both;
+            font-weight: 500;
+        }
+
+        .card-flip.back .card-back {
+            opacity: 1;
+        }
+
+        .card-flip.back .card-front {
+            opacity: 0;
+        }
+
+        .sm2-info {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 20px;
+            font-weight: 500;
+            animation: slideUp 0.6s ease-out 0.5s both;
+            letter-spacing: 0.2px;
+        }
+
+        /* Screen 3: Quiz */
+        .screen-3 {
+            background: linear-gradient(180deg, #fff5f0 0%, #ffffff 100%);
+            padding: 40px 25px;
+            position: relative;
+        }
+
+        .screen-3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .quiz-container {
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quiz-container h2 {
+            color: #333;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            animation: slideUp 0.6s ease-out both;
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: slideUp 0.6s ease-out 0.1s both;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            background: white;
+            border: 2px solid #e8e8e8;
+            border-radius: 14px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 500;
+            animation: slideUp 0.6s ease-out both;
+            opacity: 0;
+        }
+
+        .quiz-option:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .quiz-option:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .quiz-option:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .quiz-option:nth-child(4) {
+            animation-delay: 0.5s;
+        }
+
+        .quiz-option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border-color: #4caf50;
+            animation: correctPulse 0.6s ease-out;
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .quiz-feedback {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(76, 175, 80, 0.02) 100%);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: #2d5f2e;
+            margin-top: 20px;
+            opacity: 0;
+            animation: slideUp 0.6s ease-out 0.8s both;
+            border-left: 4px solid #4caf50;
+            font-weight: 500;
+        }
+
+        /* Screen 4: Tema */
+        .screen-4 {
+            background: linear-gradient(180deg, #fff8f0 0%, #ffffff 100%);
+            padding: 35px 25px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .screen-4::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .tema-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            animation: slideUp 0.6s ease-out both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tema-content {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            border-left: 4px solid #ff6b6b;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: #555;
+            animation: slideUp 0.6s ease-out 0.1s both;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tema-content strong {
+            color: #ff6b6b;
+            font-weight: 700;
+        }
+
+        .tema-comparativa {
+            background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            border-left: 4px solid #ffc107;
+            font-size: 0.9rem;
+            color: #856404;
+            animation: slideUp 0.6s ease-out 0.2s both;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.1);
+        }
+
+        /* Screen 5: Progreso */
+        .screen-5 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen-5::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .screen-5 > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .screen-5 h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            animation: slideUp 0.6s ease-out both;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.18);
+            padding: 18px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.6s ease-out both;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .achievements {
+            margin-top: 30px;
+            animation: slideUp 0.6s ease-out 0.4s both;
+        }
+
+        .achievements-title {
+            font-size: 1.15rem;
+            margin-bottom: 18px;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .achievement-badge {
+            font-size: 2.5rem;
+            animation: popInBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .achievement-badge:hover {
+            transform: scale(1.15);
+        }
+
+        .achievement-badge:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .achievement-badge:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .achievement-badge:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .achievement-badge:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .achievement-badge:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        /* Screen 6: CTA Final */
+        .screen-6 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 30px;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: space-around;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen-6::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .screen-6::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+
+        .screen-6 > div {
+            position: relative;
+            z-index: 2;
+        }
+
+        .screen-6 h2 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            animation: slideUpScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .screen-6 .subtitle-cta {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin: 15px 0;
+            animation: slideUp 0.8s ease-out 0.2s both;
+            font-weight: 500;
+        }
+
+        .screen-6 .desc-cta {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin: 20px 0;
+            animation: slideUp 0.8s ease-out 0.4s both;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            color: #667eea;
+            padding: 16px 45px;
+            border-radius: 28px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            margin-top: 30px;
+            animation: slideUpScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: 0.3px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUpScale {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes popInBounce {
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            60% {
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes cardFlip {
+            0% {
+                transform: perspective(1000px) rotateY(0deg);
+                opacity: 1;
+            }
+            45% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0;
+                transform: perspective(1000px) rotateY(90deg);
+            }
+            55% {
+                opacity: 0;
+            }
+            100% {
+                transform: perspective(1000px) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes cardFlipBack {
+            0% {
+                transform: perspective(1000px) rotateY(0deg);
+                opacity: 1;
+            }
+            45% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0;
+                transform: perspective(1000px) rotateY(-90deg);
+            }
+            55% {
+                opacity: 0;
+            }
+            100% {
+                transform: perspective(1000px) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes correctPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 15px rgba(76, 175, 80, 0);
+            }
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #ff6b9d);
+            animation: progressBar 24s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        @keyframes progressBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.6s ease-out 1s both;
+        }
+
+        .controls button {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .controls button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <!-- Screen 1: Bienvenida -->
+        <div class="screen screen-1 active">
+            <div class="emoji">👋</div>
+            <h1>¡Bienvenida, Lucía!</h1>
+            <p class="subtitle">Aprende oposiciones de forma inteligente</p>
+            <p class="desc">Usando técnicas científicas de memorización</p>
+        </div>
+
+        <!-- Screen 2: Flashcards -->
+        <div class="screen screen-2">
+            <h2>🎴 Flashcards Inteligentes</h2>
+            <div class="card-flip" id="card">
+                <div class="card-front">Constitución</div>
+                <div class="card-back">Ley fundamental del Estado</div>
+            </div>
+            <div class="sm2-info">📍 Algoritmo Spaced Repetition SM-2 • Próximo repaso: 2/10/2026</div>
+        </div>
+
+        <!-- Screen 3: Quiz -->
+        <div class="screen screen-3">
+            <div class="quiz-container">
+                <h2>❓ Quiz Diario</h2>
+                <div class="quiz-question">¿Cuántos artículos tiene la Constitución Española de 1978?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option">150</div>
+                    <div class="quiz-option selected" id="correct-option">169</div>
+                    <div class="quiz-option">185</div>
+                    <div class="quiz-option">200</div>
+                </div>
+                <div class="quiz-feedback">✓ ¡Correcto! La CE de 1978 tiene 169 artículos distribuidos en 10 títulos.</div>
+            </div>
+        </div>
+
+        <!-- Screen 4: Tema -->
+        <div class="screen screen-4">
+            <h2 class="tema-title">📚 La Constitución Española de 1978</h2>
+            <div class="tema-content">
+                <strong>Concepto clave:</strong> España es un Estado social y democrático de Derecho, organizado como Monarquía Parlamentaria. La Constitución es el fundamento del ordenamiento jurídico.
+                <div class="tema-comparativa">
+                    <strong>🎬 Aprende con analogía:</strong> Imagina la Constitución como el "libro de reglas" de una película. Igual que en El Señor de los Anillos hay un código que todos deben seguir, en España hay una Constitución.
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 5: Progreso -->
+        <div class="screen screen-5">
+            <div>
+                <h2>📊 Tu Progreso</h2>
+                <div class="progress-stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Racha 🔥</div>
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">días</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Promedio</div>
+                        <div class="stat-number">78%</div>
+                        <div class="stat-label">quizzes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Conceptos</div>
+                        <div class="stat-number">24</div>
+                        <div class="stat-label">aprendidos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Tiempo</div>
+                        <div class="stat-number">4h</div>
+                        <div class="stat-label">estudiados</div>
+                    </div>
+                </div>
+                <div class="achievements">
+                    <div class="achievements-title">🏆 Logros Desbloqueados</div>
+                    <div class="achievements-grid">
+                        <div class="achievement-badge">🎯</div>
+                        <div class="achievement-badge">🔥</div>
+                        <div class="achievement-badge">🧠</div>
+                        <div class="achievement-badge">💯</div>
+                        <div class="achievement-badge">📚</div>
+                        <div class="achievement-badge">⭐</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 6: CTA -->
+        <div class="screen screen-6">
+            <div>
+                <h2>¡Ya está lista! 🚀</h2>
+                <p class="subtitle-cta">Tu app de estudio inteligente</p>
+                <p class="desc-cta">Comienza el lunes 5 de octubre • Gratis • Sin límites</p>
+            </div>
+            <button class="cta-button">Empezar Ahora</button>
+        </div>
+
+        <div class="progress-bar"></div>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousScreen()">← Anterior</button>
+        <button onclick="nextScreen()">Siguiente →</button>
+        <button onclick="toggleAutoPlay()">Play/Pausa</button>
+    </div>
+
+    <script>
+        let currentScreen = 0;
+        const screens = document.querySelectorAll('.screen');
+        let autoPlayInterval = null;
+
+        function showScreen(index) {
+            screens.forEach(screen => screen.classList.remove('active'));
+            if (index >= 0 && index < screens.length) {
+                screens[index].classList.add('active');
+                currentScreen = index;
+            }
+
+            // Special animations for screen 2 (flashcards)
+            if (index === 1) {
+                setTimeout(() => {
+                    document.getElementById('card').classList.add('back');
+                }, 1000);
+            }
+
+            // Reset card for next time
+            if (index !== 1) {
+                const card = document.getElementById('card');
+                if (card) card.classList.remove('back');
+            }
+        }
+
+        function nextScreen() {
+            showScreen(currentScreen + 1);
+        }
+
+        function previousScreen() {
+            showScreen(currentScreen - 1);
+        }
+
+        function toggleAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            } else {
+                let screen = 0;
+                autoPlayInterval = setInterval(() => {
+                    showScreen(screen);
+                    screen++;
+                    if (screen >= screens.length) {
+                        screen = 0;
+                    }
+                }, 4000);
+            }
+        }
+
+        // Screen durations (ms)
+        const screenDurations = [3500, 3500, 3500, 3500, 4000, 4000];
+        let autoSequenceInterval = null;
+
+        function startAutoSequence() {
+            let currentIndex = 0;
+
+            function showNextScreen() {
+                showScreen(currentIndex);
+                const duration = screenDurations[currentIndex] || 4000;
+                currentIndex++;
+
+                if (currentIndex < screens.length) {
+                    autoSequenceInterval = setTimeout(showNextScreen, duration);
+                }
+            }
+
+            showNextScreen();
+        }
+
+        // Start auto-play on load
+        window.addEventListener('load', () => {
+            setTimeout(startAutoSequence, 500);
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextScreen();
+            if (e.key === 'ArrowLeft') previousScreen();
+            if (e.key === ' ') {
+                e.preventDefault();
+                if (autoSequenceInterval) {
+                    clearTimeout(autoSequenceInterval);
+                    autoSequenceInterval = null;
+                } else {
+                    startAutoSequence();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
