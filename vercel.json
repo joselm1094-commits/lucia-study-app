@@ -1,0 +1,15 @@
+{
+  "buildCommand": "npm run build",
+  "env": {
+    "NODE_OPTIONS": "--no-warnings"
+  },
+  "functions": {
+    "api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "regions": ["cdg1"],
+  "git": {
+    "deploymentEnabled": true
+  }
+}
