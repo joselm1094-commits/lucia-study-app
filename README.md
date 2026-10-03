@@ -1,6 +1,8 @@
-# 📖 Estudio Inteligente - Programa de Oposiciones I2
+# 🎓 YUNA - Estudio Inteligente
 
-Una **aplicación web interactiva** diseñada científicamente para que Lucía apruebe las oposiciones I2 (Información y Asistencia Tributaria y Aduanera) usando técnicas comprobadas de memorización.
+Una **aplicación web interactiva** diseñada científicamente para dominar oposiciones con técnicas de gamificación, notificaciones personalizadas y repaso espaciado.
+
+**🔥 MVP en testing con Lucia - Semana 1 (4-7 OCT 2026)**
 
 ---
 
