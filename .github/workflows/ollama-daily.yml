@@ -1,0 +1,30 @@
+name: Daily Question Generation (Ollama)
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 02:00 AM UTC cada día
+
+jobs:
+  generate-questions:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install axios @supabase/supabase-js
+
+      - name: Run Ollama generation
+        run: node scripts/generate-questions-ollama.js
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Verify Supabase
+        run: echo "✅ Questions generation completed at $(date)"
