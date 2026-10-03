@@ -3,6 +3,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { useEffect } from 'react';
+import { initSentry, initPosthog } from '@/lib/monitoring';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -25,6 +26,10 @@ export const metadata: Metadata = {
 function OneSignalInit() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      // Initialize monitoring
+      initSentry();
+      initPosthog();
+
       // OneSignal SDK via CDN
       const script = document.createElement('script');
       script.async = true;

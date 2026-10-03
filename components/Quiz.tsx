@@ -1,125 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { trackQuizEvent, trackStreakUpdate, handleError } from '@/lib/monitoring';
+import { QUIZ_QUESTIONS } from '@/lib/quiz-data';
 
+// Convert quiz-data Question type to local QuizQuestion type
 interface QuizQuestion {
+  id: number;
   question: string;
   options: string[];
-  correct: number;
+  correctIndex: number;
   explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  topic: string;
+  oposicion: string;
 }
 
-const quizData: QuizQuestion[] = [
-  {
-    question: "¿Cuántos artículos tiene la Constitución Española de 1978?",
-    options: ["150", "169", "185", "200"],
-    correct: 1,
-    explanation: "La CE de 1978 tiene 169 artículos distribuidos en 10 títulos."
-  },
-  {
-    question: "¿Cuál es la forma política del Estado español según la Constitución?",
-    options: ["República", "Monarquía Parlamentaria", "Monarquía Absoluta", "Democracia Directa"],
-    correct: 1,
-    explanation: "Art. 1.3 CE: La forma política del Estado español es la Monarquía Parlamentaria."
-  },
-  {
-    question: "¿Cuáles son los valores superiores del ordenamiento jurídico español?",
-    options: [
-      "Orden, estabilidad, seguridad",
-      "Libertad, justicia, igualdad, pluralismo político",
-      "Tradición, honor, patriotismo",
-      "Eficacia, economía, rapidez"
-    ],
-    correct: 1,
-    explanation: "Art. 1.1 CE: España propugna como valores superiores la libertad, justicia, igualdad y pluralismo político."
-  },
-  {
-    question: "¿Qué es el Habeas Corpus?",
-    options: [
-      "Derecho a huelga",
-      "Procedimiento que garantiza libertad personal ante detenciones ilegales",
-      "Derecho a asociación",
-      "Procedimiento penal ordinario"
-    ],
-    correct: 1,
-    explanation: "Art. 17.4 CE: Habeas Corpus protege contra detenciones ilegales (máx. 24 horas)."
-  },
-  {
-    question: "¿Cuál es la función principal del Defensor del Pueblo?",
-    options: [
-      "Hacer leyes",
-      "Juzgar delitos",
-      "Supervisar la Administración y defender derechos constitucionales",
-      "Dirigir el gobierno"
-    ],
-    correct: 2,
-    explanation: "Art. 54 CE: El Defensor del Pueblo es comisionado para la defensa de derechos del Título I."
-  },
-  {
-    question: "¿Cuál es la diferencia entre derechos fundamentales y principios rectores?",
-    options: [
-      "No hay diferencia",
-      "Fundamentales (arts. 15-29) tienen máxima protección; Principios (arts. 39-52) menor protección",
-      "Los fundamentales son menos importantes",
-      "Principios rectores se suspenden fácilmente"
-    ],
-    correct: 1,
-    explanation: "Los derechos fundamentales (arts. 15-29) tienen protección judicial y amparo. Los principios rectores (arts. 39-52) informan legislación pero menor protección."
-  },
-  {
-    question: "¿Qué artículo recoge el derecho de igualdad ante la ley?",
-    options: ["Artículo 10", "Artículo 14", "Artículo 20", "Artículo 24"],
-    correct: 1,
-    explanation: "Art. 14 CE: 'Los españoles son iguales ante la ley, sin que pueda prevalecer discriminación alguna...'"
-  },
-  {
-    question: "¿Cuál es el procedimiento para reformar la Constitución en derechos fundamentales?",
-    options: [
-      "Simple mayoría del Congreso",
-      "Mayoría de 2/3 de cada cámara, disolución, ratificación y referéndum",
-      "Decreto del Gobierno",
-      "Votación del Tribunal Constitucional"
-    ],
-    correct: 1,
-    explanation: "Art. 168 CE: Reforma agravada requiere mayoría de 2/3, disolución de Cortes, ratificación y referéndum."
-  },
-  {
-    question: "¿Qué es el recurso de amparo?",
-    options: [
-      "Demanda ordinaria ante juzgados",
-      "Medio procesal ante Tribunal Constitucional para defender derechos",
-      "Solicitud al Defensor del Pueblo",
-      "Apelación ante Audiencia Nacional"
-    ],
-    correct: 1,
-    explanation: "Art. 53.2 CE: Amparo es recurso ante TC para tutelar libertades y derechos (arts. 14, 15-29, 30.2)."
-  },
-  {
-    question: "¿Cuál es el principio fundamental de la Administración Pública?",
-    options: [
-      "Eficiencia económica",
-      "Servir con objetividad los intereses generales",
-      "Rapidez en decisiones",
-      "Autonomía sin control"
-    ],
-    correct: 1,
-    explanation: "Art. 103.1 CE: Administración sirve con objetividad los intereses generales, con sometimiento pleno a ley y Derecho."
-  }
-];
-
 export default function Quiz() {
+  const quizData = QUIZ_QUESTIONS as QuizQuestion[];
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [completed, setCompleted] = useState(false);
 
+  useEffect(() => {
+    trackQuizEvent('quiz_started', { totalQuestions: quizData.length });
+  }, [quizData.length]);
+
   const handleAnswer = (index: number) => {
     if (answered) return;
     setSelectedAnswer(index);
     setAnswered(true);
-    if (index === quizData[currentQuestion].correct) {
+    const isCorrect = index === quizData[currentQuestion].correctIndex;
+    if (isCorrect) {
       setScore(score + 1);
+      trackQuizEvent('quiz_completed', {
+        question: currentQuestion + 1,
+        correct: true,
+        topic: quizData[currentQuestion].topic,
+      });
+    } else {
+      trackQuizEvent('quiz_failed', {
+        question: currentQuestion + 1,
+        correct: false,
+        topic: quizData[currentQuestion].topic,
+      });
     }
   };
 
@@ -130,6 +56,8 @@ export default function Quiz() {
       setSelectedAnswer(null);
     } else {
       setCompleted(true);
+      const percentage = Math.round((score / quizData.length) * 100);
+      trackStreakUpdate(1, 50); // Add 50 XP on quiz completion
     }
   };
 
@@ -187,17 +115,17 @@ export default function Quiz() {
             disabled={answered}
             className={`w-full p-4 text-left rounded-lg font-semibold transition ${
               selectedAnswer === index
-                ? index === question.correct
+                ? index === question.correctIndex
                   ? 'bg-green-500 text-white'
                   : 'bg-red-500 text-white'
-                : answered && index === question.correct
+                : answered && index === question.correctIndex
                 ? 'bg-green-200 text-green-900'
                 : 'bg-gray-100 hover:bg-gray-200'
             } ${answered ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
             {option}
-            {answered && index === question.correct && ' ✓'}
-            {answered && selectedAnswer === index && index !== question.correct && ' ✗'}
+            {answered && index === question.correctIndex && ' ✓'}
+            {answered && selectedAnswer === index && index !== question.correctIndex && ' ✗'}
           </button>
         ))}
       </div>
