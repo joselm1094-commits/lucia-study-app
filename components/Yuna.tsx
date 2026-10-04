@@ -21,14 +21,14 @@ interface YunaProps {
 }
 
 const IMAGE_MAP: Record<YunaExpression, string> = {
-  smile: '/yuna/yuna-frontend-smile.png',
-  celebrate: '/yuna/yuna-celebrate.png',
-  confused: '/yuna/yuna-confused.png',
-  study: '/yuna/yuna-study-mode.png',
-  applaud: '/yuna/yuna-applauding.png',
-  'on-fire': '/yuna/yuna-on-fire.png',
-  sleep: '/yuna/yuna-sleeping.png',
-  profile: '/yuna/yuna-profile.png',
+  smile: '/yuna/yuna-frontend-smile.jpg',
+  celebrate: '/yuna/yuna-celebrate.jpg',
+  confused: '/yuna/yuna-confused.jpg',
+  study: '/yuna/yuna-study-mode.jpg',
+  applaud: '/yuna/yuna-applauding.jpg',
+  'on-fire': '/yuna/yuna-on-fire.jpg',
+  sleep: '/yuna/yuna-sleeping.jpg',
+  profile: '/yuna/yuna-profile.jpg',
 };
 
 const SIZE_MAP: Record<string, { width: number; height: number; containerClass: string }> = {
