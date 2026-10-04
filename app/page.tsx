@@ -7,6 +7,7 @@ import WordSearch from '@/components/WordSearch';
 import ThemeReader from '@/components/ThemeReader';
 import Progress from '@/components/Progress';
 import MissionsPanel from '@/components/MissionsPanel';
+import { YunaHero, YunaMini } from '@/components/Yuna';
 import { wordSearchWords } from '@/lib/content';
 
 type GameType = 'home' | 'quiz' | 'flashcards' | 'wordsearch' | 'themes' | 'progress' | 'daily' | 'missions' | 'session-select';
@@ -53,30 +54,31 @@ export default function Home() {
             <p className="text-slate-600 text-sm md:text-base font-medium">Estudio Inteligente</p>
           </div>
 
-          {/* Racha Section */}
-          <div className="mb-12 w-full max-w-sm animate-slide-in-up" style={{ animationDelay: '0.1s' }}>
-            <div className="card-elevated text-center relative overflow-hidden">
+          {/* Racha Section with Yuna */}
+          <div className="mb-12 w-full max-w-md animate-slide-in-up" style={{ animationDelay: '0.1s' }}>
+            <div className="card-elevated text-center relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200">
               {/* Background glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 blur-2xl -z-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 blur-3xl -z-10"></div>
 
-              <p className="text-xs md:text-sm text-slate-600 font-semibold uppercase tracking-wider mb-3">
+              <p className="text-xs md:text-sm text-indigo-600 font-semibold uppercase tracking-wider mb-4">
                 🔥 Racha Actual
               </p>
 
-              <div className="text-7xl md:text-8xl font-black mb-3 animate-glow">
-                🔥
+              {/* Yuna - Hero Size */}
+              <div className="flex justify-center mb-4">
+                <YunaHero expression="on-fire" />
               </div>
 
-              <p className="text-5xl md:text-6xl font-black text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text mb-2">
+              <p className="text-6xl md:text-7xl font-black text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text mb-2">
                 {studyStreak}
               </p>
 
-              <p className="text-slate-600 text-sm md:text-base font-medium">
+              <p className="text-slate-700 text-base md:text-lg font-bold">
                 días en racha constante
               </p>
 
-              <div className="mt-4 pt-4 border-t border-slate-200">
-                <p className="text-xs text-slate-500">¡No la pierdas hoy!</p>
+              <div className="mt-6 pt-4 border-t-2 border-indigo-200">
+                <p className="text-sm text-indigo-600 font-semibold animate-pulse">✨ ¡No la pierdas hoy!</p>
               </div>
             </div>
           </div>
@@ -84,44 +86,44 @@ export default function Home() {
           {/* CTA Button - Estudiar Hoy */}
           <button
             onClick={handleStartSession}
-            className="mb-12 px-8 md:px-12 py-4 md:py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-lg md:text-2xl rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-indigo-500/50 transition-all duration-300 active:scale-95 animate-slide-in-up"
+            className="mb-12 px-10 md:px-16 py-5 md:py-7 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-600 text-white font-black text-xl md:text-3xl rounded-3xl shadow-2xl hover:shadow-3xl hover:shadow-purple-500/50 transition-all duration-300 active:scale-95 animate-slide-in-up transform hover:scale-105"
             style={{ animationDelay: '0.2s' }}
           >
             🎯 ESTUDIAR HOY
           </button>
 
           {/* Stats Cards */}
-          <div className="w-full max-w-sm grid grid-cols-2 gap-4 mb-12 animate-slide-in-up" style={{ animationDelay: '0.3s' }}>
-            <div className="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-              <p className="text-xs md:text-sm text-slate-600 font-semibold uppercase tracking-wider">
+          <div className="w-full max-w-md grid grid-cols-2 gap-4 mb-12 animate-slide-in-up" style={{ animationDelay: '0.3s' }}>
+            <div className="card-elevated bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 border-2 border-blue-300 hover:shadow-lg transition-all">
+              <p className="text-xs md:text-sm text-blue-700 font-bold uppercase tracking-wider">
                 📊 XP Hoy
               </p>
-              <p className="text-3xl md:text-4xl font-black text-indigo-600 mt-2">{xpToday}</p>
-              <p className="text-xs text-slate-500 mt-1">de 500 posibles</p>
+              <p className="text-4xl md:text-5xl font-black text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text mt-3 mb-1">{xpToday}</p>
+              <p className="text-xs text-blue-600 font-semibold">de 500 posibles</p>
 
               {/* Progress bar */}
-              <div className="mt-3 h-2 bg-blue-200 rounded-full overflow-hidden">
+              <div className="mt-4 h-3 bg-blue-200 rounded-full overflow-hidden shadow-inner">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 rounded-full"
                   style={{ width: `${(xpToday / 500) * 100}%` }}
                 ></div>
               </div>
             </div>
 
-            <div className="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
-              <p className="text-xs md:text-sm text-slate-600 font-semibold uppercase tracking-wider">
+            <div className="card-elevated bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100 border-2 border-purple-300 hover:shadow-lg transition-all">
+              <p className="text-xs md:text-sm text-purple-700 font-bold uppercase tracking-wider">
                 ⭐ Nivel
               </p>
-              <p className="text-3xl md:text-4xl font-black text-purple-600 mt-2">4</p>
-              <p className="text-xs text-slate-500 mt-1">Aprendiz Rápido</p>
+              <p className="text-4xl md:text-5xl font-black text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text mt-3 mb-1">4</p>
+              <p className="text-xs text-purple-600 font-semibold">Aprendiz Rápido</p>
 
               {/* Level indicator */}
-              <div className="mt-3 flex gap-1">
+              <div className="mt-4 flex gap-1.5">
                 {[...Array(5)].map((_, i) => (
                   <div
                     key={i}
-                    className={`h-1 flex-1 rounded-full ${
-                      i < 4 ? 'bg-purple-500' : 'bg-purple-200'
+                    className={`h-1.5 flex-1 rounded-full transition-all ${
+                      i < 4 ? 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-md' : 'bg-purple-300'
                     }`}
                   ></div>
                 ))}
@@ -130,16 +132,16 @@ export default function Home() {
           </div>
 
           {/* Secondary Buttons */}
-          <div className="w-full max-w-sm flex flex-col gap-3 animate-slide-in-up" style={{ animationDelay: '0.4s' }}>
+          <div className="w-full max-w-md flex flex-col gap-3 animate-slide-in-up" style={{ animationDelay: '0.4s' }}>
             <button
               onClick={() => setCurrentGame('progress')}
-              className="w-full py-3 md:py-4 bg-white border-2 border-indigo-200 hover:border-indigo-400 text-indigo-600 font-semibold rounded-xl transition-all duration-300 hover:bg-indigo-50 active:scale-95"
+              className="w-full py-4 md:py-5 bg-gradient-to-r from-indigo-50 to-blue-50 border-2 border-indigo-300 hover:border-indigo-500 text-indigo-700 font-bold rounded-2xl transition-all duration-300 hover:bg-indigo-100 hover:shadow-lg active:scale-95"
             >
               📊 Mi Progreso
             </button>
             <button
               onClick={() => setCurrentGame('missions')}
-              className="w-full py-3 md:py-4 bg-white border-2 border-purple-200 hover:border-purple-400 text-purple-600 font-semibold rounded-xl transition-all duration-300 hover:bg-purple-50 active:scale-95"
+              className="w-full py-4 md:py-5 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 hover:border-purple-500 text-purple-700 font-bold rounded-2xl transition-all duration-300 hover:bg-purple-100 hover:shadow-lg active:scale-95"
             >
               🎯 Misiones
             </button>
