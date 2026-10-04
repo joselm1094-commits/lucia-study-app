@@ -17,8 +17,9 @@ export function OneSignalInit() {
       document.head.appendChild(script);
 
       script.onload = () => {
-        if (window.OneSignal) {
-          window.OneSignal.init({
+        const win = window as any;
+        if (win.OneSignal) {
+          win.OneSignal.init({
             appId: '5c335363-0903-4618-8790-fc0154e3f603',
             allowLocalhostAsSecureOrigin: true,
           });
@@ -26,7 +27,7 @@ export function OneSignalInit() {
           // Notificación 08:00 AM
           setTimeout(() => {
             const streak = localStorage.getItem('streak') || '0';
-            window.OneSignal.sendSelfNotification({
+            win.OneSignal.sendSelfNotification({
               headings: { en: '¡Buenos días, estudiante!' },
               contents: { en: `Tu racha actual: ${streak} 🔥 ¡Vamos a estudiar hoy!` },
               url: '/',
@@ -37,7 +38,7 @@ export function OneSignalInit() {
           const todayLastNotif = localStorage.getItem('notif-today');
           if (todayLastNotif !== new Date().toDateString()) {
             setTimeout(() => {
-              window.OneSignal.sendSelfNotification({
+              win.OneSignal.sendSelfNotification({
                 headings: { en: '⏰ Última hora para tu racha' },
                 contents: { en: 'Completa un quiz antes de las 00:00 para mantener tu racha viva 🔥' },
                 url: '/',

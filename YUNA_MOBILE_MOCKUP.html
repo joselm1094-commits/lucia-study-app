@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUNA - Mobile Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #8B5CF6;
+            --accent: #EC4899;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-600: #475569;
+            --slate-900: #0F172A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: white;
+            border-radius: 40px;
+            border: 12px solid #333;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+        }
+
+        .notch {
+            height: 30px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            width: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .screen {
+            flex: 1;
+            overflow-y: auto;
+            background: linear-gradient(to br, #F8FAFC via #FFFFFF to #E0F2FE);
+            padding-top: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .screen::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        /* ============ HOME SCREEN ============ */
+        .screen-home .header {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(to right, #6366F1, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #64748B;
+            font-weight: 500;
+        }
+
+        .streak-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+            border: 2px solid #E2E8F0;
+        }
+
+        .streak-label {
+            font-size: 11px;
+            color: #64748B;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .streak-emoji {
+            font-size: 48px;
+            margin: 10px 0;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .streak-number {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(to right, #6366F1, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .streak-desc {
+            font-size: 13px;
+            color: #64748B;
+            margin-top: 8px;
+        }
+
+        .cta-button {
+            background: linear-gradient(to right, #6366F1, #8B5CF6);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 20px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.4);
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #E2E8F0;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #64748B;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(to right, #6366F1, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .secondary-buttons {
+            display: flex;
+            gap: 12px;
+            padding: 0 20px 20px;
+        }
+
+        .secondary-btn {
+            flex: 1;
+            background: white;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #64748B;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn:hover {
+            border-color: #6366F1;
+            color: #6366F1;
+            background: #F8FAFC;
+        }
+
+        /* ============ QUIZ SCREEN ============ */
+        .quiz-header {
+            padding: 16px 20px;
+            background: white;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .quiz-progress {
+            font-size: 12px;
+            color: #64748B;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: #E2E8F0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #6366F1, #8B5CF6);
+            width: 30%;
+            transition: width 0.5s ease;
+        }
+
+        .quiz-content {
+            padding: 20px;
+        }
+
+        .quiz-question {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-weight: 600;
+            color: var(--slate-900);
+            line-height: 1.4;
+        }
+
+        .difficulty-tag {
+            display: inline-block;
+            font-size: 10px;
+            background: #F0F4FF;
+            color: #6366F1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .answer-option {
+            background: white;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #1E293B;
+        }
+
+        .answer-option:hover {
+            border-color: #6366F1;
+            background: #F8FAFC;
+        }
+
+        .answer-option.correct {
+            border-color: #10B981;
+            background: #E8FAF3;
+            color: #059669;
+        }
+
+        .answer-option.wrong {
+            border-color: #EF4444;
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        /* ============ WORD SEARCH SCREEN ============ */
+        .wordsearch-header {
+            padding: 16px 20px;
+            background: white;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .wordsearch-title {
+            font-weight: 700;
+            color: var(--slate-900);
+            font-size: 16px;
+        }
+
+        .wordsearch-content {
+            padding: 20px;
+        }
+
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .letter-cell {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .letter-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .letter-cell.selected {
+            background: linear-gradient(135deg, #EC4899, #F43F5E);
+        }
+
+        .words-found {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .words-found-title {
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 12px;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .word-badge {
+            display: inline-block;
+            background: #E8FAF3;
+            color: #059669;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* ============ ACHIEVEMENTS SCREEN ============ */
+        .achievements-content {
+            padding: 20px;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .achievement-icon {
+            font-size: 32px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            color: var(--slate-900);
+            font-size: 14px;
+        }
+
+        .achievement-desc {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 2px;
+        }
+
+        .achievement-locked {
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }
+
+        /* ============ NAVIGATION ============ */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 56px;
+            background: white;
+            border-top: 1px solid #E2E8F0;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #64748B;
+            font-size: 10px;
+            gap: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: #6366F1;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        /* ============ HIDDEN SCREENS ============ */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="notch"></div>
+
+        <!-- HOME SCREEN -->
+        <div class="screen screen-home active">
+            <div class="header">
+                <div class="logo">YUNA</div>
+                <div class="subtitle">Estudio Inteligente</div>
+            </div>
+
+            <div class="streak-card">
+                <div class="streak-label">🔥 Racha Actual</div>
+                <div class="streak-emoji">🔥</div>
+                <div class="streak-number">7</div>
+                <div class="streak-desc">días en racha constante</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">📊 XP Hoy</div>
+                    <div class="stat-value">150</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">⭐ Nivel</div>
+                    <div class="stat-value">4</div>
+                </div>
+            </div>
+
+            <button class="cta-button" onclick="goToScreen('quiz')">🎯 ESTUDIAR HOY</button>
+
+            <div class="secondary-buttons">
+                <button class="secondary-btn" onclick="goToScreen('progress')">📊 Progreso</button>
+                <button class="secondary-btn" onclick="goToScreen('achievements')">🏆 Logros</button>
+            </div>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div class="screen screen-quiz">
+            <div class="quiz-header">
+                <div class="quiz-progress">
+                    <span>Pregunta 3 de 10</span>
+                    <span>30%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="quiz-content">
+                <div class="difficulty-tag">⭐⭐ Medio</div>
+                <div class="quiz-question">¿Cuál es la edad mínima para ser diputado?</div>
+
+                <div class="answer-option" onclick="selectAnswer(this, true)">25 años</div>
+                <div class="answer-option" onclick="selectAnswer(this, false)">18 años</div>
+                <div class="answer-option" onclick="selectAnswer(this, false)">21 años</div>
+                <div class="answer-option" onclick="selectAnswer(this, false)">30 años</div>
+            </div>
+        </div>
+
+        <!-- WORD SEARCH SCREEN -->
+        <div class="screen screen-wordsearch">
+            <div class="wordsearch-header">
+                <div class="wordsearch-title">Sopa de Letras</div>
+            </div>
+
+            <div class="wordsearch-content">
+                <div class="letter-grid">
+                    <div class="letter-cell">C</div>
+                    <div class="letter-cell">O</div>
+                    <div class="letter-cell">N</div>
+                    <div class="letter-cell">S</div>
+                    <div class="letter-cell">T</div>
+                    <div class="letter-cell">I</div>
+                    <div class="letter-cell">T</div>
+                    <div class="letter-cell">U</div>
+                    <div class="letter-cell">C</div>
+                    <div class="letter-cell">I</div>
+                    <div class="letter-cell">D</div>
+                    <div class="letter-cell">E</div>
+                    <div class="letter-cell">R</div>
+                    <div class="letter-cell">E</div>
+                    <div class="letter-cell">C</div>
+                    <div class="letter-cell">H</div>
+                    <div class="letter-cell">O</div>
+                    <div class="letter-cell">S</div>
+                    <div class="letter-cell">A</div>
+                    <div class="letter-cell">D</div>
+                    <div class="letter-cell">M</div>
+                    <div class="letter-cell">I</div>
+                    <div class="letter-cell">N</div>
+                    <div class="letter-cell">I</div>
+                    <div class="letter-cell">S</div>
+                </div>
+
+                <div class="words-found">
+                    <div class="words-found-title">Palabras Encontradas</div>
+                    <div class="word-badge">CONSTITUCIÓN</div>
+                    <div class="word-badge">DERECHOS</div>
+                    <div class="word-badge">ADMIN</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACHIEVEMENTS SCREEN -->
+        <div class="screen screen-achievements">
+            <div class="achievements-content">
+                <div class="achievement-card">
+                    <div class="achievement-icon">🎯</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Primer Quiz</div>
+                        <div class="achievement-desc">Completa tu primer quiz</div>
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">🔥</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Racha de 7 Días</div>
+                        <div class="achievement-desc">Mantén una racha de 7 días</div>
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">🏆</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Master Quiz</div>
+                        <div class="achievement-desc">Completa 50 quizzes</div>
+                    </div>
+                </div>
+
+                <div class="achievement-card achievement-locked">
+                    <div class="achievement-icon">💯</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Perfección</div>
+                        <div class="achievement-desc">Consigue 100% en 10 quizzes</div>
+                    </div>
+                </div>
+
+                <div class="achievement-card achievement-locked">
+                    <div class="achievement-icon">👑</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Rey del Estudio</div>
+                        <div class="achievement-desc">Llega al nivel 10</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="goToScreen('home')">
+                <div class="nav-icon">🏠</div>
+                <div>Home</div>
+            </div>
+            <div class="nav-item" onclick="goToScreen('quiz')">
+                <div class="nav-icon">❓</div>
+                <div>Quiz</div>
+            </div>
+            <div class="nav-item" onclick="goToScreen('wordsearch')">
+                <div class="nav-icon">📝</div>
+                <div>Sopa</div>
+            </div>
+            <div class="nav-item" onclick="goToScreen('achievements')">
+                <div class="nav-icon">🏆</div>
+                <div>Logros</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToScreen(screenName) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+            // Show selected screen
+            document.querySelector(`.screen-${screenName}`).classList.add('active');
+
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+
+            // Scroll to top
+            document.querySelector('.screen').scrollTop = 0;
+        }
+
+        function selectAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add('correct');
+                setTimeout(() => {
+                    alert('✅ ¡Correcto! +10 XP');
+                }, 300);
+            } else {
+                element.classList.add('wrong');
+                setTimeout(() => {
+                    alert('❌ Incorrecto. Intenta de nuevo.');
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
